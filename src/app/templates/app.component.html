@@ -1,0 +1,175 @@
+    <div class="scroll-progress" [style.width.%]="scrollProgress" aria-hidden="true"></div>
+
+    <header class="topbar" [class.scrolled]="isNavScrolled" aria-label="Top navigation">
+      <div class="topbar-inner">
+        <div class="brand">
+          <img src="images/tieto-logo.svg" alt="Tieto" class="brand-logo" />
+        </div>
+        <nav class="nav">
+          <a href="#home" [class.active]="activeSection === 'home'">Home</a>
+          <a href="#wishes" [class.active]="activeSection === 'wishes'">Wishes</a>
+          <a href="#farewell" [class.active]="activeSection === 'farewell'">Farewell</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero" id="home">
+        <div class="hero-blobs" aria-hidden="true">
+          <span class="blob blob-a"></span>
+          <span class="blob blob-b"></span>
+          <span class="blob blob-c"></span>
+        </div>
+
+        <div class="hero-copy">
+          <p class="eyebrow">ONE LAST RELEASE 🚀</p>
+          <h1 class="shimmer-text">Thank You, {{ config.personName }}!</h1>
+          <p class="lead">{{ config.subheadline }}</p>
+          <p class="note">Here's a little something from the people who got to build alongside you.</p>
+
+          <div class="actions">
+            <button class="primary" type="button" (click)="scrollToSection('wishes'); createRipple($event)">Read the Team's Wishes ↓</button>
+            <button class="secondary" type="button" (click)="openWishForm(); createRipple($event)">Leave a Wish 💌</button>
+          </div>
+
+          <button class="scroll-cue" type="button" (click)="scrollToSection('wishes')" aria-label="Scroll to wishes">
+            <span></span>
+          </button>
+        </div>
+
+        <div
+          class="envelope-wrap"
+          [class.open]="isEnvelopeOpen"
+          [class.pulse]="!isEnvelopeOpen"
+          (mouseenter)="isEnvelopeOpen = true"
+          (mousemove)="onEnvelopeTilt($event)"
+          (mouseleave)="onEnvelopeLeave($event)"
+          (click)="toggleEnvelope()"
+          aria-label="Hover to open the farewell letter"
+        >
+          <div class="envelope-shadow"></div>
+          <div class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="letter">
+              <div class="stamp">❤</div>
+              <div class="letter-body">
+                <p class="meta">Dear {{ config.personName }},</p>
+                <p>Thank you for the clarity, the calm, and the countless “one quick questions” that somehow changed the whole roadmap.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section wishes" id="wishes" aria-labelledby="wishes-title">
+        <div class="section-heading">
+          <p class="eyebrow subtle">Messages from the team</p>
+          <h2 id="wishes-title">Messages From the Team</h2>
+        </div>
+
+        <div class="wish-grid" *ngIf="wishes.length; else emptyState">
+          <article class="wish-card" *ngFor="let wish of wishes; let i = index" [style.animation-delay.ms]="i * 80">
+            <div class="wish-head">
+              <span class="emoji">{{ wish.emoji || '💬' }}</span>
+            </div>
+            <h3>{{ wish.name }}</h3>
+            <p class="role">{{ wish.role || 'Team Member' }}</p>
+            <p class="message">{{ wish.message }}</p>
+            <button class="read-more" type="button" (click)="openWishDetails(wish)">Read full message</button>
+          </article>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <p>No messages yet — be the first to leave a little love! 💌</p>
+            <button class="primary" type="button" (click)="openWishForm()">Write the First Wish</button>
+          </div>
+        </ng-template>
+      </section>
+
+      <section class="final-section" id="farewell">
+        <div class="final-letter">
+          <p class="eyebrow subtle">One last thing...</p>
+          <h2>GOOD LUCK ON YOUR NEXT ADVENTURE! 🚀</h2>
+          <p>{{ config.farewellMessage }}</p>
+          <p>{{ config.nextAdventureMessage }}</p>
+
+          <div class="final-actions">
+            <button class="primary" type="button" (click)="openWishForm()">Leave a Final Wish 💌</button>
+            <button class="secondary" type="button" (click)="scrollToTop()">Back to the Top ↑</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-backdrop" *ngIf="showWishForm" (click)="closeWishForm()"></div>
+
+    <section class="wish-modal" *ngIf="showWishForm" aria-modal="true" role="dialog" aria-labelledby="wish-form-title">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <button class="close-btn" type="button" aria-label="Close form" (click)="closeWishForm()">×</button>
+        <p class="eyebrow subtle">Leave a wish</p>
+        <h3 id="wish-form-title">Add Your Message 💌</h3>
+
+        <form [formGroup]="wishForm" (ngSubmit)="submitWish()">
+          <label>
+            <span>Name</span>
+            <input formControlName="name" type="text" placeholder="Your name" />
+            <small *ngIf="wishForm.get('name')?.touched && wishForm.get('name')?.hasError('required')">Name is required.</small>
+            <small *ngIf="wishForm.get('name')?.touched && wishForm.get('name')?.hasError('minlength')">Name must be at least 2 characters.</small>
+          </label>
+
+          <label>
+            <span>Role</span>
+            <input formControlName="role" type="text" placeholder="Your role" />
+          </label>
+
+          <label>
+            <span>Message</span>
+            <textarea formControlName="message" rows="7" maxlength="1000" placeholder="Share a memory or a thank-you..."></textarea>
+            <small *ngIf="wishForm.get('message')?.touched && wishForm.get('message')?.hasError('required')">Message is required.</small>
+            <small *ngIf="wishForm.get('message')?.touched && wishForm.get('message')?.hasError('minlength')">Message must be at least 5 characters.</small>
+          </label>
+
+          <div class="emoji-row">
+            <span>Emoji</span>
+            <div class="emoji-picker">
+              <button type="button" *ngFor="let emoji of emojiOptions" [class.active]="wishForm.get('emoji')?.value === emoji" (click)="setEmoji(emoji)">
+                {{ emoji }}
+              </button>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="secondary" type="button" (click)="closeWishForm()">Cancel</button>
+            <button class="primary" type="submit" [disabled]="wishForm.invalid">Add My Wish</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <div class="modal-backdrop" *ngIf="selectedWish" (click)="closeWishDetails()"></div>
+
+    <section class="wish-modal" *ngIf="selectedWish as wish" aria-modal="true" role="dialog" aria-labelledby="wish-detail-title">
+      <article class="modal-card wish-detail-card" (click)="$event.stopPropagation()">
+        <button class="close-btn" type="button" aria-label="Close message" (click)="closeWishDetails()">×</button>
+        <div class="wish-head">
+          <span class="emoji">{{ wish.emoji || '💬' }}</span>
+        </div>
+        <p class="eyebrow subtle">Message from</p>
+        <h3 id="wish-detail-title">{{ wish.name }}</h3>
+        <p class="role">{{ wish.role || 'Team Member' }}</p>
+        <p class="full-message">{{ wish.message }}</p>
+      </article>
+    </section>
+
+    <div class="toast" *ngIf="toastMessage" aria-live="polite">{{ toastMessage }}</div>
+
+    <div class="confetti" *ngIf="showConfetti" aria-hidden="true">
+      <span *ngFor="let piece of confettiPieces" [style.left.%]="piece.left" [style.background]="piece.color" [style.animationDelay.ms]="piece.delay"></span>
+    </div>
+
+    <button class="back-to-top" type="button" [class.show]="showBackToTop" (click)="scrollToTop()" aria-label="Back to top">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>

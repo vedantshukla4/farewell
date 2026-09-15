@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <defs>
+    <linearGradient id="bg4" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#eaf8f0"/>
+      <stop offset="100%" stop-color="#fdf1d8"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg4)"/>
+  <rect x="120" y="180" width="560" height="520" rx="30" fill="#ffffff" opacity="0.38"/>
+  <circle cx="250" cy="350" r="100" fill="#d9f0e7" opacity="0.8"/>
+  <circle cx="550" cy="370" r="110" fill="#f7dcc9" opacity="0.8"/>
+  <g fill="#352f3d">
+    <circle cx="260" cy="430" r="55"/>
+    <circle cx="400" cy="400" r="62"/>
+    <circle cx="540" cy="430" r="55"/>
+    <rect x="200" y="500" width="120" height="120" rx="26"/>
+    <rect x="350" y="480" width="120" height="150" rx="24"/>
+    <rect x="500" y="500" width="120" height="120" rx="26"/>
+  </g>
+  <text x="400" y="815" fill="#413d52" font-size="32" font-family="Arial, sans-serif" text-anchor="middle" font-weight="700">Milestone moment</text>
+</svg>

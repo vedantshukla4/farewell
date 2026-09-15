@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <defs>
+    <linearGradient id="bg2" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fdf1d8"/>
+      <stop offset="100%" stop-color="#f9cfc5"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg2)"/>
+  <rect x="80" y="160" width="640" height="520" rx="32" fill="#fff8f2" opacity="0.4"/>
+  <circle cx="260" cy="350" r="90" fill="#efe7ff" opacity="0.9"/>
+  <circle cx="530" cy="330" r="105" fill="#f6d8ca" opacity="0.8"/>
+  <g fill="#312d3d">
+    <rect x="160" y="510" width="160" height="120" rx="18"/>
+    <rect x="340" y="500" width="120" height="140" rx="18"/>
+    <rect x="490" y="510" width="160" height="120" rx="18"/>
+  </g>
+  <text x="400" y="810" fill="#413c50" font-size="32" font-family="Arial, sans-serif" text-anchor="middle" font-weight="700">Launch day energy</text>
+</svg>
